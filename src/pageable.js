@@ -187,7 +187,7 @@ if (!Element.prototype.closest) {
                 touch: true,
                 keydown: true
             },
-            autoInitialze: true
+            autoInitialize: true
         };
         this.config = extend(defaults, options);
 
@@ -222,7 +222,7 @@ if (!Element.prototype.closest) {
         this.anchors = [];
         this.pages = [];
 
-        if (this.config.autoInitialze) {
+        if (this.config.autoInitialize) {
             this.init();
         }
     };
@@ -263,7 +263,7 @@ if (!Element.prototype.closest) {
 
                 if (page.id !== clean) {
                     page.id = clean;
-                }ß
+                }
 
                 that.anchors.push("#" + clean);
                 page.classList.add("pg-page");
