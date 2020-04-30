@@ -161,7 +161,6 @@ if (!Element.prototype.closest) {
      * Released under the MIT license
      */
     var Pageable = function Pageable(container, options) {
-        var that = this;
         var defaults = {
             pips: true,
             animation: 300,
@@ -232,6 +231,7 @@ if (!Element.prototype.closest) {
      */
     Pageable.prototype.init = function(container) {
         if (this.firstInit) {
+            var that = this;
             this.firstInit = false
             this.container = typeof container === "string" ? document.querySelector(container) : container; // container not found
 
