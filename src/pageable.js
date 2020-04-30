@@ -161,11 +161,6 @@ if (!Element.prototype.closest) {
      * Released under the MIT license
      */
     var Pageable = function Pageable(container, options) {
-        // missing container parameter
-        if (container === undefined) {
-            return console.error("Pageable:", "No container defined.");
-        }
-
         var that = this;
         var defaults = {
             pips: true,
@@ -196,8 +191,7 @@ if (!Element.prototype.closest) {
             autoInitialze: true
         };
         this.config = extend(defaults, options);
-        
-        
+
         this.events = this.config.events; // search for child nodes using the child selector
 
         this.axis = this.horizontal ? "x" : "y";
