@@ -216,12 +216,14 @@ if (!Element.prototype.closest) {
 
         this.horizontal = this.config.orientation === "horizontal";
 
-        this.firstInit = true
+        this.firstInit = true;
 
-        this.container = undefined
+        this.container = container;
+        this.anchors = [];
+        this.pages = [];
 
         if (this.config.autoInitialze) {
-            this.init(container);
+            this.init();
         }
     };
 
@@ -229,11 +231,11 @@ if (!Element.prototype.closest) {
      * Initialze instance
      * @return {Void}
      */
-    Pageable.prototype.init = function(container) {
+    Pageable.prototype.init = function() {
         if (this.firstInit) {
             var that = this;
             this.firstInit = false
-            this.container = typeof container === "string" ? document.querySelector(container) : container; // container not found
+            this.container = typeof this.container === "string" ? document.querySelector(this.container) : this.container; // container not found
 
             if (!this.container) {
                 return console.error("Pageable:", "The container could not be found.");
@@ -261,7 +263,7 @@ if (!Element.prototype.closest) {
 
                 if (page.id !== clean) {
                     page.id = clean;
-                }
+                }ß
 
                 that.anchors.push("#" + clean);
                 page.classList.add("pg-page");
