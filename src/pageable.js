@@ -192,7 +192,8 @@ if (!Element.prototype.closest) {
                 mouse: true,
                 touch: true,
                 keydown: true
-            }
+            },
+            autoInitialze: true
         };
         this.container = typeof container === "string" ? document.querySelector(container) : container; // container not found
 
@@ -257,7 +258,9 @@ if (!Element.prototype.closest) {
         this.down = false;
         this.initialised = false;
         this.touch = "ontouchstart" in window || window.DocumentTouch && _instanceof(document, DocumentTouch);
-        this.init();
+        if (this.config.autoInitialze) {
+            this.init();
+        }
     };
 
     /**
