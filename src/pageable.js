@@ -195,49 +195,11 @@ if (!Element.prototype.closest) {
             },
             autoInitialze: true
         };
-        this.container = typeof container === "string" ? document.querySelector(container) : container; // container not found
-
-        if (!this.container) {
-            return console.error("Pageable:", "The container could not be found.");
-        }
-
         this.config = extend(defaults, options);
+        
+        
         this.events = this.config.events; // search for child nodes using the child selector
 
-        this.pages = [].slice.call(this.container.querySelectorAll(this.config.childSelector)); // none found
-
-        if (!this.pages.length) {
-            return console.error("Pageable:", "No child nodes matching the selector " + this.config.childSelector + " could be found.");
-        }
-
-        this.horizontal = this.config.orientation === "horizontal";
-        this.anchors = [];
-        this.pages.forEach(function(page, i) {
-            var clean = "";
-            var anchor = getDataAttr(page, "anchor");
-            if (anchor) {
-                clean = anchor.replace(/\s+/, "-").toLowerCase();
-            } else {
-                if (Array.isArray(that.config.anchors) && that.config.anchors.length) {
-                    clean = that.config.anchors[i].replace(/\s+/, "-").toLowerCase();
-                } else {
-                    clean = page.className.replace(/\s+/, "-").toLowerCase();
-                }
-            }
-
-            if (page.id !== clean) {
-                page.id = clean;
-            }
-
-            that.anchors.push("#" + clean);
-            page.classList.add("pg-page");
-            if (i == 0) {
-                page.classList.add("pg-active");
-            } else {
-                page.classList.remove("pg-active");
-            }
-
-        });
         this.axis = this.horizontal ? "x" : "y";
         this.mouseAxis = {
             x: "clientX",
@@ -258,8 +220,15 @@ if (!Element.prototype.closest) {
         this.down = false;
         this.initialised = false;
         this.touch = "ontouchstart" in window || window.DocumentTouch && _instanceof(document, DocumentTouch);
+
+        this.horizontal = this.config.orientation === "horizontal";
+
+        this.firstInit = true
+
+        this.container = undefined
+
         if (this.config.autoInitialze) {
-            this.init();
+            this.init(container);
         }
     };
 
@@ -267,7 +236,48 @@ if (!Element.prototype.closest) {
      * Initialze instance
      * @return {Void}
      */
-    Pageable.prototype.init = function() {
+    Pageable.prototype.init = function(container) {
+        if (this.firstInit) {
+            this.firstInit = false
+            this.container = typeof container === "string" ? document.querySelector(container) : container; // container not found
+
+            if (!this.container) {
+                return console.error("Pageable:", "The container could not be found.");
+            }
+
+            this.pages = [].slice.call(this.container.querySelectorAll(this.config.childSelector)); // none found
+
+            if (!this.pages.length) {
+                return console.error("Pageable:", "No child nodes matching the selector " + this.config.childSelector + " could be found.");
+            }
+
+            this.anchors = [];
+            this.pages.forEach(function(page, i) {
+                var clean = "";
+                var anchor = getDataAttr(page, "anchor");
+                if (anchor) {
+                    clean = anchor.replace(/\s+/, "-").toLowerCase();
+                } else {
+                    if (Array.isArray(that.config.anchors) && that.config.anchors.length) {
+                        clean = that.config.anchors[i].replace(/\s+/, "-").toLowerCase();
+                    } else {
+                        clean = page.className.replace(/\s+/, "-").toLowerCase();
+                    }
+                }
+
+                if (page.id !== clean) {
+                    page.id = clean;
+                }
+
+                that.anchors.push("#" + clean);
+                page.classList.add("pg-page");
+                if (i == 0) {
+                    page.classList.add("pg-active");
+                } else {
+                    page.classList.remove("pg-active");
+                }
+            });
+        }
         if (!this.initialised && !this.container.pageable) {
             var o = this.config;
             this.wrapper = document.createElement("div");
