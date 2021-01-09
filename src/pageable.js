@@ -365,7 +365,6 @@ if (!Element.prototype.closest) {
             start: this._start.bind(this),
             drag: this._drag.bind(this),
             stop: this._stop.bind(this),
-            click: this._click.bind(this),
             prev: this.prev.bind(this),
             next: this.next.bind(this),
             keydown: this._keydown.bind(this)
@@ -376,14 +375,6 @@ if (!Element.prototype.closest) {
         this.wrapper.addEventListener(this.touch ? "touchstart" : "mousedown", this.callbacks.start, false);
         window.addEventListener(this.touch ? "touchmove" : "mousemove", this.callbacks.drag, false);
         window.addEventListener(this.touch ? "touchend" : "mouseup", this.callbacks.stop, false);
-
-        if (this.navPrevEl) {
-            this.navPrevEl.addEventListener("click", this.callbacks.prev, false);
-            if (this.navNextEl) this.navNextEl.addEventListener("click", this.callbacks.next, false);
-        } // anchor clicks
-
-
-        document.addEventListener("click", this.callbacks.click, false);
     };
 
     /**
@@ -397,16 +388,6 @@ if (!Element.prototype.closest) {
         window.addEventListener(this.touch ? "touchmove" : "mousemove", this.callbacks.drag);
         window.removeEventListener(this.touch ? "touchend" : "mouseup", this.callbacks.stop);
         document.removeEventListener("keydown", this.callbacks.keydown);
-
-        if (this.navPrevEl) {
-            this.navPrevEl.removeEventListener("click", this.callbacks.prev, false);
-        }
-
-        if (this.navNextEl) {
-            this.navNextEl.removeEventListener("click", this.callbacks.next, false);
-        }
-
-        document.removeEventListener("click", this.callbacks.click);
     };
 
     /**
@@ -665,22 +646,6 @@ if (!Element.prototype.closest) {
     };
 
     /** PRIVATE METHODS **/
-
-    /**
-     * Click callback for anchors
-     * @param  {Event} e
-     * @return {Bool}
-     */
-    Pageable.prototype._click = function(e) {
-        if (e.target.closest) {
-            var anchor = e.target.closest("a");
-
-            if (anchor && this.anchors.indexOf(anchor.hash) > -1) {
-                e.preventDefault();
-                this.scrollToAnchor(anchor.hash);
-            }
-        }
-    };
 
     Pageable.prototype._preventDefault = function(e) {
         e.preventDefault();
