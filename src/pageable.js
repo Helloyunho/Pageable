@@ -782,7 +782,9 @@ if (!Element.prototype.closest) {
         return false
       }
 
-      this._preventDefault(e)
+      if (evt.target.tagName !== 'BUTTON' && evt.target.tagName !== 'A') {
+        this._preventDefault(e)
+      }
 
       this.dragging = this.config.freeScroll // suspend slideshow
 
